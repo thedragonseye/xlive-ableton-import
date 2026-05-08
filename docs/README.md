@@ -7,6 +7,10 @@ This folder contains project documentation for **xlive-ableton-import** — a to
 | File | Description |
 |---|---|
 | [`workflow-diagram.html`](./workflow-diagram.html) | Interactive end-to-end workflow diagram |
+| [`API.md`](./API.md) | Full API reference for all Front Half and Back Half modules |
+| [`CONTRIBUTING.md`](./CONTRIBUTING.md) | Contributor setup, workflow, coding standards, and PR guidelines |
+| [`polywav-format.md`](./polywav-format.md) | PolyWAV binary format reference for parser contributors |
+| [`usb-metadata-snapshot.md`](./usb-metadata-snapshot.md) | USB scene snapshot format and metadata.json contract |
 
 ---
 
