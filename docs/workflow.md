@@ -52,7 +52,7 @@ flowchart TD
 
   S1 --> D1{Media readable?}
   D1 -- "No" --> X1["S-ERR1 Stop: Media not readable\nRecommend: check adapter/cable, reinsert, try another port"] --> endstop([End])
-  D1 -- "Yes" --> S2 --> D2{Session(s) found?}
+  D1 -- "Yes" --> S2 --> D2{Sessions found?}
 
   D2 -- "No" --> X2["S-ERR2 Stop: No supported sessions detected\nRecommend: verify folder path and supported session format"] --> endstop
   D2 -- "Yes" --> E3 --> E4 --> E5 --> E6 --> S3 --> D3{Validation OK?}
