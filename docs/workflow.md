@@ -68,4 +68,4 @@ flowchart TD
 
   D5 -- "No" --> S7 --> S8 --> S9 --> E8 --> E9 --> D7{Meets expectations?}
   D7 -- "No" --> E5
-  D7 -- "Yes" --> E10 --> end([End: Delivered Live Set(s)])
+  D7 -- "Yes" --> E10 --> end([End: Delivered Live Sets])
