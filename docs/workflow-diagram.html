@@ -1,17 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="color-scheme" content="dark" />
-    <title>xlive-ableton-import Workflow Diagram</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/lucide@1.8.0/dist/umd/lucide.min.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  </head>
-  <body>
-    <p>xlive-ableton-import Workflow Diagram - see full interactive version at the hosted URL</p>
-  </body>
+<head>
+<meta charset="UTF-8">
+<title>XLive → Ableton Workflow</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+
+<style>
+body {
+  margin: 0;
+  background: #111;
+  color: #fff;
+  font-family: sans-serif;
+}
+#controls {
+  padding: 10px;
+  background: #1a1a1a;
+  position: sticky;
+  top: 0;
+}
+button {
+  padding: 6px 10px;
+  margin-right: 10px;
+}
+#diagram {
+  overflow: auto;
+  padding: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="controls">
+  <button onclick="zoomIn()">Zoom In</button>
+  <button onclick="zoomOut()">Zoom Out</button>
+  <button onclick="resetZoom()">Reset</button>
+</div>
+
+<div id="diagram">
+<div class="mermaid">
+flowchart TD
+
+A[Insert SD/USB] --> B[Mount Media]
+B --> C[Scan Session Files]
+
+C --> D{Sessions Found?}
+D -- No --> X[Stop: No Sessions]
+D -- Yes --> E[Select Session]
+
+E --> F[Configure Import]
+F --> G[Run Import Tool]
+
+G --> H[Parse PolyWAV]
+H --> I[Extract Metadata]
+I --> J[Build Track Map]
+
+J --> K[Convert Audio]
+K --> L[Create Ableton Tracks]
+
+L --> M[Generate Live Set]
+M --> N[Write Files]
+
+N --> O[Open in Ableton]
+O --> P[Verify Tracks]
+
+P --> Q{Correct?}
+Q -- No --> F
+Q -- Yes --> R[Save Final Project]
+
+</div>
+</div>
+
+<script>
+mermaid.initialize({ startOnLoad: true });
+
+let scale = 1;
+
+function applyZoom() {
+  document.querySelector("#diagram").style.transform = `scale(${scale})`;
+}
+
+function zoomIn() {
+  scale += 0.1;
+  applyZoom();
+}
+
+function zoomOut() {
+  scale -= 0.1;
+  if (scale < 0.3) scale = 0.3;
+  applyZoom();
+}
+
+function resetZoom() {
+  scale = 1;
+  applyZoom();
+}
+</script>
+
+</body>
 </html>
+
