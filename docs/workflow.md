@@ -1,59 +1,50 @@
+```mermaid
 flowchart TD
-
-  %% =========================================================
-  %% xlive-ableton-import End-to-End Workflow (Traceable)
-  %% =========================================================
 
   start([Start]) --> E1
 
-  %% -------- Engineer lane --------
   subgraph AV["A/V Engineer Actions (E#)"]
     direction TB
-    E1["E1 Insert media (SD card or USB drive) into computer"]
-    E2["E2 Confirm media is mounted / accessible"]
-    E3["E3 Locate session folders on media"]
-    E4["E4 Choose target sessions to import"]
-    E5["E5 Choose import options\n• destination folder\n• track naming strategy\n• tempo/timebase assumptions\n• render/convert settings"]
-    E6["E6 Run xlive-ableton-import (CLI/GUI)"]
-    E7["E7 Review import report / warnings"]
-    E8["E8 Open generated Live Sets in Ableton Live"]
-    E9["E9 Verify audio alignment, track layout, routing"]
-    E10["E10 Save final Live Sets / package for delivery"]
+    E1["Insert media (SD/USB)"]
+    E2["Confirm media mounted"]
+    E3["Locate sessions"]
+    E4["Select sessions"]
+    E5["Configure import options"]
+    E6["Run importer"]
+    E7["Review report"]
+    E8["Open in Ableton"]
+    E9["Verify tracks"]
+    E10["Save final project"]
   end
 
-  %% -------- System lane --------
-  subgraph SYS["xlive-ableton-import System Steps (S#)"]
+  subgraph SYS["System Steps (S#)"]
     direction TB
-    S1["S1 Detect media type and root path"]
-    S2["S2 Scan for supported XLive session structures"]
-    S3["S3 Validate session integrity\n• expected files present\n• readable audio assets\n• metadata parseable"]
-    S4["S4 Extract session metadata\n• track list\n• take/clip regions\n• timestamps/timebase info\n• sample rate/bit depth"]
-    S5["S5 Build conversion plan\n• track mapping\n• file transforms\n• set structure layout"]
-    S6["S6 Convert or normalize audio (as configured)\n• resample (if needed)\n• channel format normalization\n• loudness/trim (optional)"]
-    S7["S7 Generate Ableton project artifacts\n• tracks\n• clips\n• arrangement timeline\n• markers/locators (if available)\n• metadata notes"]
-    S8["S8 Write outputs to destination\n• Ableton project folder\n• referenced audio files\n• logs/report"]
-    S9["S9 Produce final report\n• outputs created\n• warnings/errors\n• next actions"]
+    S1["Detect media"]
+    S2["Scan sessions"]
+    S3["Validate session"]
+    S4["Extract metadata"]
+    S5["Build track map"]
+    S6["Convert audio"]
+    S7["Generate project"]
+    S8["Write outputs"]
+    S9["Generate report"]
   end
 
-  %% -------- Decisions & loops --------
   E1 --> E2 --> S1
 
   S1 --> D1{Media readable?}
-  D1 -- "No" --> X1["S-ERR1 Stop: Media not readable\nRecommend: check adapter/cable, reinsert, try another port"] --> ENDSTOP([End])
-  D1 -- "Yes" --> S2 --> D2{Sessions found?}
+  D1 -- No --> ENDSTOP([End])
+  D1 -- Yes --> S2 --> D2{Sessions found?}
 
-  D2 -- "No" --> X2["S-ERR2 Stop: No supported sessions detected\nRecommend: verify folder path and supported session format"] --> ENDSTOP
-  D2 -- "Yes" --> E3 --> E4 --> E5 --> E6 --> S3 --> D3{Validation OK?}
+  D2 -- No --> ENDSTOP
+  D2 -- Yes --> E3 --> E4 --> E5 --> E6 --> S3 --> D3{Valid?}
 
-  D3 -- "No" --> X3["S-ERR3 Report validation failures\n• missing/corrupt files\n• unsupported encoding\n• metadata parse failure"] --> E7 --> D4{Try a different session / fix media?}
-  D4 -- "Fix & retry" --> E2
-  D4 -- "Abort" --> ENDSTOP
+  D3 -- No --> E7 --> E2
+  D3 -- Yes --> S4 --> S5 --> S6 --> D4{Warnings?}
 
-  D3 -- "Yes" --> S4 --> S5 --> S6 --> D5{Conversion warnings?}
-  D5 -- "Yes" --> S8 --> S9 --> E7 --> D6{Proceed anyway?}
-  D6 -- "Adjust options" --> E5
-  D6 -- "Proceed" --> E8
+  D4 -- Yes --> S8 --> S9 --> E7 --> E8
+  D4 -- No --> S7 --> S8 --> S9 --> E8 --> E9 --> D5{OK?}
 
-  D5 -- "No" --> S7 --> S8 --> S9 --> E8 --> E9 --> D7{Meets expectations?}
-  D7 -- "No" --> E5
-  D7 -- "Yes" --> E10 --> FINAL[End: Delivered Live Sets]
+  D5 -- No --> E5
+  D5 -- Yes --> E10 --> FINAL[End: Delivered Live Sets]
+```
